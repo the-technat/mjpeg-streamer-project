@@ -1,0 +1,9 @@
+version: "3"
+services:
+  certbot:
+    build: ./certbot
+    container_name: certbot
+    restart: always
+    volumes:
+      - ./certbot/ssl/webroot/:/webroots/
+      - ./certbot/ssl/letsencrypt/:/etc/letsencrypt
