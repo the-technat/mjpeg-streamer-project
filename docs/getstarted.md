@@ -26,7 +26,9 @@ The requirements used for this project are split into skills/software and hardwa
 * one or to IPv4 A DNS records pointing to your server (used by openvpn and the proxy to connect to the stream)
 
 ## Prepare Raspberry Pi to as mjpeg-streamer
-I assume raspberry pi os is installed on a sd card and ssh is enabled. the packages listed in the Requirements are installed on the raspberry pi.
+I assume raspberry pi os is installed and configured on a sd card and ssh is enabled. the packages listed in the Requirements are installed on the raspberry pi.
+
+If you have no experience with raspberry pi's i recommend you reading my guide about [installing Raspberry Pi OS](https://technat.ch/de/blog/install-raspberrypios) and also my guide about [default raspberry pi config](https://technat.ch/de/blog/configure-raspberry-pi-os).
 
  Now what is left to do is enabling motion:  
  `sudo systemctl enable --now motion`
