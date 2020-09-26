@@ -12,7 +12,6 @@ RUN npm install express express-force-ssl
 
 # copy files into the container
 COPY addstaticroute.sh .
-COPY proxy.js .
 
 # define cmd
 CMD [ sh -c "addstaticroute.sh && node ./proxy.js"]
