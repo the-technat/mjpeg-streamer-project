@@ -26,9 +26,9 @@ The requirements used for this project are split into skills/software and hardwa
 * one or to IPv4 A DNS records pointing to your server (used by openvpn and the proxy to connect to the stream)
 
 ## Prepare Raspberry Pi to as mjpeg-streamer
-I assume raspberry pi os is installed and configured on a sd card and ssh is enabled. the packages listed in the Requirements are installed on the raspberry pi.
+I assume raspberry pi os is installed and configured including the packages from the requirements installed.
 
-If you have no experience with raspberry pi's i recommend you reading my guide about [installing Raspberry Pi OS](https://technat.ch/de/blog/install-raspberrypios) and also my guide about [default raspberry pi config](https://technat.ch/de/blog/configure-raspberry-pi-os).
+If you have no experience with raspberry pi's I recommend you reading my guide about [installing Raspberry Pi OS](https://technat.ch/de/blog/install-raspberrypios) and also my guide about [default raspberry pi config](https://technat.ch/de/blog/configure-raspberry-pi-os) to get started with it.
 
  Now what is left to do is enabling motion:  
  `sudo systemctl enable --now motion`
@@ -38,49 +38,34 @@ If you have no experience with raspberry pi's i recommend you reading my guide a
 
 ### Changes in motion config
 The following things I like to change in motion
-+----------------------+-------------------+---------------+----------------------------------------------------+
-| Option               | default parameter | new parameter | description                                        |
-+======================+===================+===============+====================================================+
-| daemon               | off               | on            | allow motion to run in daemon mode                 |
-+----------------------+-------------------+---------------+----------------------------------------------------+   
-| videodevice          | /dev/video0       | /dev/video0   | depends on your cam and the number of\             |
-|                      |                    |               | devices attachted to the pi,\                      |
-|                      |                   |               | usually its /dev/video0                            |          
-+----------------------+-------------------+---------------+----------------------------------------------------+
-| V412_palette         | 17                | 15            | Pixel Format, must match the camera, \             |
-|                      |                   |               | see `v4l2-ctl -V` command for details about your\  |
-|                      |                   |               | cam you look for a code that looks like "YUYV" \   |
-|                      |                   |               | which means 15, google for other codes             |
-+----------------------+-------------------+---------------+----------------------------------------------------+
-| width                | 320               | 1920          | depends on the max resolution of your camera       |
-+----------------------+-------------------+---------------+----------------------------------------------------+
-| heigth               | 240               | 1080          | depends on the max resolution of your camera       |
-+----------------------+-------------------+---------------+----------------------------------------------------+
-| framrate             | 2                 | 25            | effective framerate of stream, based on what your\ |
-|                      |                   |               | cam can do, I recommend not going over the magic\  |
-|                      |                   |               | border of 24/25                                    |
-+----------------------+-------------------+---------------+----------------------------------------------------+
-| stream_port          | 8081              | xxzyy         | port the stream is visiable, can be left default\  |
-|                      |                   |               | or anything else, I usually use a high 6XXXX Port  |
-+----------------------+-------------------+---------------+----------------------------------------------------+
-| stream_maxrate       | 1                 | 30            | maximum fps the stream delivers, set the same as\  |
-|                      |                   |               | the framrate option                                |
-+----------------------+-------------------+---------------+----------------------------------------------------+
-| stream_localhost     | on                | off           | enabled streaming over http with it's ip           |
+| Option               | default parameter | new parameter | description                  |
+| -------------------- | ----------------- | ------------- | ---------------------------- |
+| daemon               | off               | on            | allow motion to run in daemon mode |
+| videodevice          | /dev/video0       | /dev/video0   | depends on your cam and the number of <br /> devices attachted to the pi, usually it's /dev/video0 |
+| V412_palette         | 17                | 15            | Pixel Format, must match the camera, see `v4l2-ctl -V` <br /> command for details about your cam <br /> you look for a code that looks like "YUYV" <br /> which means 15, google for other codes |
+| width                | 320               | 1920          | depends on the max resolution of your camera |
+| heigth               | 240               | 1080          | depends on the max resolution of your camera |
+| framrate             | 2                 | 25            | effective framerate of stream, based on what your cam can do, <br /> I recommend not going over the magic border of 24/25 |
+| stream_port          | 8081              | xxzyy         | port the stream is visiable, can be left default or anything else, <br /> I usually use a high 6XXXX Port |
+| stream_maxrate       | 1                 | 30            | maximum fps the stream delivers, set the same as the framrate option |
+| stream_localhost     | on                | off           | enabled streaming over http with it's ip |
 
-I also enabled basic http authentication with http://username:password@192.168.210.1:8081 so that nobody inside the same network can access the stream without going over the proxy. But this is personal preference and totaly not necessary.
+I also enabled basic http authentication so that nobody inside the same network can access the stream without going over the proxy. But this is personal preference and totally not necessary.
 
 To make these changes take affect, restart the motion service:
 `sudo systemctl restart motion`
 
-If you now hit the the connection string (http://username:password@192.168.210.1:8081) in your browser you should see the stream and with it mjpeg is working inside your private network.
+If you now hit the the connection string (http://username:password@192.168.210.1:8081) in your browser you should see the mjpeg stream.
 
-Now the back-end services need to be configured before a VPN connection can be setup.
+The next step would to to coin the raspberry pi into the vpn but for that we need a vpn server running.
 
-## Installation of back-end services
-The backend services need to run on a cloud server with docker and docker-compose installed.
 
-If they are installed, the repository and with it the docker files can be downloaded:
+## Fire up openvpn-server
+As VPN Protocol I use OpenVPN.
+
+I assume the packages from the requirements are installed on your server and you are logged in.
+
+Then the repository and with it the docker files can be cloned:
 
 ```
 git clone https://github.com/the-technat/mjpeg-streamer-project.git
