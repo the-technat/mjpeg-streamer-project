@@ -7,11 +7,15 @@ EXPOSE 443
 # create a place for our app
 WORKDIR /app
 
-#install dependency for mjpeg-proxy
+# copy files into the container
+COPY addstaticroute.sh addstaticroute.sh
+COPY node-mjpeg-proxy-master node-mjpeg-proxy-master
+
+#install "dependency's" for mjpeg-proxy
 RUN npm install express express-force-ssl
 
-# copy files into the container
-COPY addstaticroute.sh .
+#install mjpeg-proxy module
+RUN npm install /node-mjpeg-proxy-module
 
-# define cmd
-CMD [ sh -c "addstaticroute.sh && node ./proxy.js"]
+# define init process
+ENTRYPOINT ./addstaticroute.sh && node ./proxy.js

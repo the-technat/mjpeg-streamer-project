@@ -1,6 +1,6 @@
 version: '3'
 services:
-  openvpn:
+  openvpn-server:
     cap_add:
      - NET_ADMIN
     image: kylemanna/openvpn
@@ -10,7 +10,7 @@ services:
      - "1194:1194/udp"
     volumes:
      - ./openvpn-server/conf:/etc/openvpn
-  proxy:
+  mjpeg-proxy:
     #cap_add:
     #  - NET_ADMIN
     build: ./mjpeg-proxy/
