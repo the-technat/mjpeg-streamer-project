@@ -27,5 +27,6 @@ This project is published under the GNU General Public License v3.0
 Some of the services used for my project are developed by other peoples. Thanks a lot for your awesome code!
 
 * [docker-openVPN](https://github.com/kylemanna/docker-openvpn) is a openVPN sever in docker by kylemanna published under the MIT License
-* [node-mjpeg-proxy](https://github.com/oxivanisher/node-mjpeg-proxy) is the origin source for the mjpeg-proxy by oxivanisher published under the GNU GPL-3.0 License
+* [node-mjpeg-proxy](https://github.com/legege/node-mjpeg-proxy) is the origin source for the mjpeg-proxy by legege published under the GNU GPL-3.0 License
+* [node-mjpeg-proxy](https://github.com/oxivanisher/node-mjpeg-proxy) containeraized mjpeg-proxy based on node-mjpeg-proxy, served as the base for my mjpeg-proxy
 * [docker-cron](https://hub.docker.com/r/gaafar/cron/) forms the base for the certbot, created by Gaafar published under the MIT License and further customized by David Herron in his blog post resulting in the certbot [Deploying an Express app with HTTPS support in Docker using Lets Encrypt SSL](https://techsparx.com/nodejs/docker/express-https.html)
