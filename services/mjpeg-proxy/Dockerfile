@@ -15,7 +15,7 @@ COPY node-mjpeg-proxy-master node-mjpeg-proxy-master
 RUN npm install express express-force-ssl
 
 #install mjpeg-proxy module
-RUN npm install /node-mjpeg-proxy-module
+RUN npm install ./node-mjpeg-proxy-master
 
 # define init process
 ENTRYPOINT ./addstaticroute.sh && node ./proxy.js

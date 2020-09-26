@@ -12,8 +12,8 @@ Header
 
 ### Setup - read name of openvpn-server container and the subnet of the pi's connected to the openvpn-server
 
-openvpnContainerName="$WFC_OVPN_CONTAINER_NAME"
-toForwardSubnet="$WFC_OVPN_STATIC_SUBNET"
+openvpnContainerName="openvpn-server"
+toForwardSubnet="192.168.240.0/24"
 
 ### Lookup the internal ip address of the openvpn-server container
 ipOfContainer=$(ping -c 1 $openvpnContainerName |egrep -o "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" |sed -n 1p)
