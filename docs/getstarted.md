@@ -188,4 +188,16 @@ You can also run a `docker-compose logs -f` on the server to see if the client i
 
 ## Fire up Proxy
 To Do:
-* 
+* fix addstaticroute.sh
+* done: install mjpeg-proxy module form local source (this way patches can be applied without waiting for original module to be deployed)
+* adjust proxy.js file for your needs (app.get lines)
+* start Proxy
+* check if you get the image on the proxy url
+
+## Add SSL to Proxy
+To Do:
+* make sure the volumes are correct! If possible without using domain names
+* fire up certbot and obtain certificate
+* uncomment volumes and ssl express server in proxy.js
+* restart everything
+* check

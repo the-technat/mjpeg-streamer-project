@@ -16,7 +16,7 @@ openvpnContainerName="openvpn-server"
 toForwardSubnet="192.168.240.0/24"
 
 ### Lookup the internal ip address of the openvpn-server container
-ipOfContainer=$(ping -c 1 $openvpnContainerName |egrep -o "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" |sed -n 1p)
+ipOfContainer=$(ping -c1 $openvpnContainerName |egrep -o "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" |sed -n 1p)
 
 ### Add route for proxy container
 ip route add $toForwardSubnet via $ipOfContainer
