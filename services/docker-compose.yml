@@ -1,0 +1,32 @@
+version: '3'
+services:
+  openvpn-server:
+    cap_add:
+     - NET_ADMIN
+    image: kylemanna/openvpn
+    container_name: openvpn-server
+    restart: always
+    ports:
+     - "1194:1194/udp"
+    volumes:
+     - ./openvpn-server/conf:/etc/openvpn
+  mjpeg-proxy:
+    cap_add:
+      - NET_ADMIN
+    build: ./mjpeg-proxy/
+    container_name: mjpeg-proxy
+    restart: always
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./mjpeg-proxy/proxy.js:/app/proxy.js:ro
+      - ./certbot/ssl/webroot/:/app/public/.well-known
+      - ./certbot/ssl/letsencrypt/:/etc/letsencrypt
+  certbot:
+    build: ./certbot
+    container_name: certbot
+    restart: always
+    volumes:
+      - ./certbot/ssl/webroot/:/webroots/live.technat.ch/.well-known
+      - ./certbot/ssl/letsencrypt/:/etc/letsencrypt
