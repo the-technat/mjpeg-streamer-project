@@ -6,6 +6,7 @@ EXPOSE 443
 
 # create a place for our app
 WORKDIR /app
+RUN mkdir public
 
 # copy files into the container
 COPY addstaticroute.sh addstaticroute.sh

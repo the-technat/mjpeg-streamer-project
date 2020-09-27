@@ -21,5 +21,12 @@ services:
       - "80:80"
     volumes:
       - ./mjpeg-proxy/proxy.js:/app/proxy.js:ro
-      #- ./certbot/ssl/webroot/:/app/public/.well-known
-      #- ./certbot/ssl/letsencrypt/:/etc/letsencrypt
+      - ./certbot/ssl/webroot/:/app/public/.well-known
+      - ./certbot/ssl/letsencrypt/:/etc/letsencrypt
+  certbot:
+    build: ./certbot
+    container_name: certbot
+    restart: always
+    volumes:
+      - ./certbot/ssl/webroot/:/webroots/live.technat.ch/.well-known
+      - ./certbot/ssl/letsencrypt/:/etc/letsencrypt

@@ -213,11 +213,56 @@ and the go to your url and see if the stream is coming.
 
 If you don't see the stream there are some things you can troubleshoot. See the [troubleshooting.md](troubleshooting.md) page
 
-
 ## Add SSL to Proxy
-To Do:
-* make sure the volumes are correct! If possible without using domain names
-* fire up certbot and obtain certificate
-* uncomment volumes and ssl express server in proxy.js
-* restart everything
-* check
+The final thing to do is to enable SSL for our Proxy. This is technically not needed, as the proxy works fine just with http but as it is our endpoint that may be implemented in a website it makes sense to configure ssl. I'm using a Let's Encrypt for that.
+
+If you don't want to use SSL you can skip this section, but remove the 443 port in the docker-compose file for the proxy as it is not needed to expose the proxy on this port
+
+In order for the proxy to use ssl he just needs the correct certificate files in the correct directories.
+
+As you may have seen in the proxy.js file these lines are currently uncommented:
+
+```
+//read ssl certificate from file system (volume shared with certbot)
+// var options = {
+  // key: fs.readFileSync("/etc/letsencrypt/archive/live.technat.ch/privkey1.pem"),
+  // cert: fs.readFileSync("/etc/letsencrypt/archive/live.technat.ch/fullchain1.pem"),
+  // ca: fs.readFileSync("/etc/letsencrypt/archive/live.technat.ch/chain1.pem")
+// };
+```
+
+This is because these files don't exists right now. We have to generate them and need something that automatically renew this certificates as Let's Encrypt certificates are only valid for 90 days. This is the job of the certbot. Another service in a container that is used to obtain a certificate and save it in the correct place. Once the certificate is saved, it can be used by the proxy. Certbot also renews the certificate if it would be expired soon.
+
+So replace the sample domain in the proxy.js lines above with your matching domain and also in the docker-compose file adjust the volume path:
+```
+certbot:
+  build: ./certbot
+  container_name: certbot
+  restart: always
+  volumes:
+    - ./certbot/ssl/webroot/:/webroots/live.technat.ch/.well-known
+    - ./certbot/ssl/letsencrypt/:/etc/letsencrypt
+```
+
+Now start the certbot:
+
+`docker-compose up -d certbot`
+
+To initally obtain a certificate it is necessary to log in to that container:
+
+`docker exec -ti certbot bash`
+
+In the container you should land on a simple bash as root. Run the following command and replace your domain where needed to obtain a certfiicate.
+Note: the proxy should run in the background in order for the certbot to validate that you obtain a certificate for your webserver.
+
+`/scripts/certbot-auto certonly --webroot -w /webroots/live.technat.ch -d live.technat.ch`
+
+The process of obtaining a certificate asks you for a Mail address which you have to enter. This address is not used for spam or anything similiar but just to inform you when a certificate would be expired or something like this.
+
+If the process was succesfully restart the entier service stack and check if you can now reach the proxy on https.
+
+`docker-compose restart`
+
+Note: we have not setup redirect from http to https so you have to manually specify https:// in the url. If you want redirect to https see the redirect-ssl.js file in the mjpeg-proxy.
+
+That's it! your mjpeg stream should be running over VPN and a Proxy and be ready to implement it in a website. To do this you could use an iframe.
