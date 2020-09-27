@@ -64,12 +64,6 @@ If you now hit the the connection string (http://username:password@192.168.210.1
 The next step would be to to join the raspberry pi into the VPN but for that the VPN server needs to run.
 
 ## Fire up openvpn-server
-Steps to Do:
-* ajust domain in services/openvpn-server/conf/openvpn.conf and services/openvpn-server/ovpn.env.sh and other settings if liked
-* fix permissions on openvpn config files chmod 644 for root
-* initpki (maybe hotfix if https://github.com/kylemanna/docker-openvpn/issues/605 is still open)
-* start the openvpn service finally in detached mode and see the logs
-
 As VPN Protocol I use OpenVPN.
 
 I assume the packages from the requirements are installed on your server and you are logged in to the server.
@@ -211,7 +205,7 @@ Then start the proxy with the following command:
 
 and the go to your url and see if the stream is coming.
 
-If you don't see the stream there are some things you can troubleshoot. See the [troubleshooting.md](troubleshooting.md) page
+If you don't see the stream there are some things you can troubleshoot. See the [troubleshooting.md](./troubleshooting.md) page
 
 ## Add SSL to Proxy
 The final thing to do is to enable SSL for our Proxy. This is technically not needed, as the proxy works fine just with http but as it is our endpoint that may be implemented in a website it makes sense to configure ssl. I'm using a Let's Encrypt for that.

@@ -22,14 +22,12 @@ if the client won't connect to the openvpn there are some reasons that could cau
 - maybe a restart of the service does help: `sudo systemctl restart openvpn`
 - `ifconfig` lists all current Network Interfaces, is there a nic named "tun0" or something like that?
 
-## If i call the url of the proxy it says "cannot get"
+## If I call the url of the proxy it says "cannot get"
 If the proxy tells you in the browser he "can not get" that has something do to with the stream which is not reachable.
 - enter a bash on your openvpn server and try to ping the client
 - check if the client is connected to the vpn
 - make sure the port you want to get the stream is correct
 - in this line: `app.get('/index1.jpg', new MjpegProxy('http://admin:admin@192.168.1.109/cgi/mjpg/mjpg.cgi').proxyRequest);` the /index1.jpg means where your stream is reachable, so if your domain is "yourdomain.com" you have to add that behind so that it looks like "yourdomain.com/index1.jpg" you can of course change that to /
-
-
 - `docker-compose logs -f` //All stuff that the containers print out on the "console" is saved into the docker logs
 - see https://github.com/kylemanna/docker-openvpn/blob/master/docs/debug.md for debuging the openvpn
 -
