@@ -255,7 +255,9 @@ Note: the proxy should run in the background in order for the certbot to validat
 
 The process of obtaining a certificate asks you for a Mail address which you have to enter. This address is not used for spam or anything similiar but just to inform you when a certificate would be expired or something like this.
 
-If the process was succesfully restart the entier service stack and check if you can now reach the proxy on https.
+If the process was succesfully edit the ./mjpeg-proxy/proxy.js file and uncomment all lines so that ssl is enabled.
+
+Restart the entier service stack and check if you can now reach the proxy on https.
 
 `docker-compose restart`
 
