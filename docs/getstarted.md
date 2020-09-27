@@ -81,23 +81,25 @@ cd mjpeg-stream-project/services
 #### Config Files
 OpenVPN needs some config files and a Certificate Authority to work. Luckily the docker image used for this project makes this very simple by just running some scripts inside container. The config files are already generated and preconfigured in the repository. You can find them in the ./openvpn-server/conf folder.
 
-If these files don't work with a newer version of the container image, there is a guide that shows how to regenerate these files and what is preconfigured. See [generate_ovpn_configfiles.md](./generate_ovpn_configfiles.md).
+adjust the domain in both files! Replace live.technat.ch with the domain pointing to your server (could also be the public ip). This is the path clients will connect to.
+
+If these files don't work with a newer version of the container image, there is a guide that shows how to regenerate these files and what is preconfigured. See [generate_ovpn_configfiles.md](./generate_ovpn_configfiles.md). But this is only necessary if something goes wrong.
 
 ### CA
 The CA can be initialized with the following command:
-`docker-compose run --rm openvpn ovpn_initpki`
+`docker-compose run --rm openvpn-server ovpn_initpki`
 
 
 Note: currently there is an open issue on the docker-openvpn image: [https://github.com/kylemanna/docker-openvpn/issues/605](https://github.com/kylemanna/docker-openvpn/issues/605). If the issue is closed, it can be ignored, but as long as it is open, the following command needs to be executed before the CA is initialized:
 
-`docker-compose run --rm openvpn touch /etc/openvpn/vars`
+`docker-compose run --rm openvpn-server touch /etc/openvpn/vars`
 
 A password for the CA and a common name for it has to be entered during the initialization
 
 !!Warning!! The Password for the CA should be keept very secure and be a safe one, because if someone get's this password he is master of your CA and therefore the strong encryption provided by OpenVPN is for nothing. A compromised CA is a hacked VPN!
 
 Once the CA is initialized and your fine with the config files, start the openvpn-server finally with:
-`docker-compose up -d openvpn`
+`docker-compose up -d openvpn-server`
 
 ## VPN Client Configuration
 Now the openvpn-server is running, a configuration file for the raspberry pi as a client can be generated.
@@ -105,10 +107,10 @@ Now the openvpn-server is running, a configuration file for the raspberry pi as 
 First set a variable to avoid tipping errors:
 `export CLIENTNAME="your_client_name"`
 then create a config file:
-`docker-compose run --rm openvpn easyrsa build-client-full $CLIENTNAME nopass`
+`docker-compose run --rm openvpn-server easyrsa build-client-full $CLIENTNAME nopass`
 since the VPN has to be established automatically we can not enter a passwort each time. There are solutions to sill pass the password in automatically but it is easier without. If really needed remove `nopass`.
 now get the clientconfig file out of the container:
-`docker-compose run --rm openvpn ovpn_getclient $CLIENTNAME > $CLIENTNAME.ovpn`
+`docker-compose run --rm openvpn-server ovpn_getclient $CLIENTNAME > $CLIENTNAME.ovpn`
 it should be located in the current directory. I recommend to store them at ./openvpn-server/clients/ or copy them to the client and delete.
 
 ### set static ip for client
@@ -116,7 +118,7 @@ Because the proxy needs to access the raspberry pi through the VPN, the client n
 
 The content should be the following:
 ```
-`ifconfig-push 192.168.240.49 192.168.240.50`
+ifconfig-push 192.168.240.49 192.168.240.50
 ```
 
 The ip's should be selected from this list of couples:
@@ -155,13 +157,13 @@ These lines need to go at the very bottom of the file.
 
 Now the file can be copied to the raspberry pi. One solution for this is to use SCP:
 
-`scp username@yourserver:/path/to/project-dir/openvpn/conf/clients/client.ovpn .`
+`scp username@yourserver:~/mjpeg-streamer-project/services/openvpn-server/clients/client.ovpn .`
 
 Or use SFTP
 
 ```
 sftp username@yourserver
-cd /path/to/project-dir/openvpn/conf/clients/
+cd ~/mjpeg-streamer-project/services/openvpn-server/clients
 get client.ovpn
 exit
 ```
@@ -253,7 +255,9 @@ Note: the proxy should run in the background in order for the certbot to validat
 
 The process of obtaining a certificate asks you for a Mail address which you have to enter. This address is not used for spam or anything similiar but just to inform you when a certificate would be expired or something like this.
 
-If the process was succesfully restart the entier service stack and check if you can now reach the proxy on https.
+If the process was succesfully edit the ./mjpeg-proxy/proxy.js file and uncomment all lines so that ssl is enabled.
+
+Restart the entier service stack and check if you can now reach the proxy on https.
 
 `docker-compose restart`
 

@@ -7,9 +7,9 @@ var path = require('path');
 
 //read ssl certificate from file system (volume shared with certbot)
 // var options = {
-  // key: fs.readFileSync("/etc/letsencrypt/archive/yourdomain.com/privkey1.pem"),
-  // cert: fs.readFileSync("/etc/letsencrypt/archive/yourdomain.com/fullchain1.pem"),
-  // ca: fs.readFileSync("/etc/letsencrypt/archive/yourdomain.com/chain1.pem")
+  // key: fs.readFileSync("/etc/letsencrypt/archive/live.technat.ch/privkey1.pem"),
+  // cert: fs.readFileSync("/etc/letsencrypt/archive/live.technat.ch/fullchain1.pem"),
+  // ca: fs.readFileSync("/etc/letsencrypt/archive/live.technat.ch/chain1.pem")
 // };
 
 var app = express()
