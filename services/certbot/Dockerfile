@@ -6,7 +6,7 @@ FROM debian
 # Install cron, certbot, bash, plus any other dependencies
 RUN apt-get update \
    && apt-get install -y cron bash wget
-RUN mkdir -p /webroots/evsoul.com/.well-known /scripts
+RUN mkdir -p /webroots /scripts
 
 WORKDIR /scripts
 RUN wget https://dl.eff.org/certbot-auto
