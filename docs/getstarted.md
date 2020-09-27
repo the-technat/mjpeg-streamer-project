@@ -187,12 +187,32 @@ If you hit a `ifconfig` you should see a new network interface named "tunX"
 You can also run a `docker-compose logs -f` on the server to see if the client is connected.
 
 ## Fire up Proxy
-To Do:
-* fix addstaticroute.sh
-* done: install mjpeg-proxy module form local source (this way patches can be applied without waiting for original module to be deployed)
-* adjust proxy.js file for your needs (app.get lines)
-* start Proxy
-* check if you get the image on the proxy url
+Now the connection between the raspberry pi and the openvpn server is established, it's time to start the proxy. The proxy is a NodeJS Application with a single simple file locatet in ./mjpeg-proxy/proxy.js
+
+In order for your stream to be routed through the proxy, you need to add a line with the stream.
+
+Open the file with your favorit editor (of course on the server)
+
+Search for a line that looks like this:
+
+```
+app.get('/index1.jpg', new MjpegProxy('http://admin:admin@192.168.1.109/cgi/mjpg/mjpg.cgi').proxyRequest);
+```
+
+Some explanations:
+* /index1.jpg: is the path on the proxy domain where the stream is available. So if you have a dns record live.technat.ch pointing to your server, the stream will be available at live.technat.ch/index1.jpg.
+This name can be changed to whatever you want, it is not necessary to have .jpg at the end, you could even use just a / to not specify a path.
+* 'http://admin:admin@192.168.1.109/cgi/mjpg/mjpg.cgi': the connection string for the stream on the raspberry pi. If you have no basic authentication enabled, username:password@ can be removed. What is necessary is the static ip of the pi (the frist one of that ifconfig-push file) and the port which you set in the motion.conf file on the raspberry pi. The path /cgi/mjpg/mjpg.cgi is also not needed.
+
+Ajust these parameters to match your raspberry pi.
+
+Then start the proxy with the following command:
+`docker-compose up -d mjpeg-proxy`
+
+and the go to your url and see if the stream is coming.
+
+If you don't see the stream there are some things you can troubleshoot. See the [troubleshooting.md](troubleshooting.md) page
+
 
 ## Add SSL to Proxy
 To Do:

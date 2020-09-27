@@ -11,8 +11,8 @@ services:
     volumes:
      - ./openvpn-server/conf:/etc/openvpn
   mjpeg-proxy:
-    #cap_add:
-    #  - NET_ADMIN
+    cap_add:
+      - NET_ADMIN
     build: ./mjpeg-proxy/
     container_name: mjpeg-proxy
     restart: always
